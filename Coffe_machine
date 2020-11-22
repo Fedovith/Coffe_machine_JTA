@@ -1,0 +1,95 @@
+expresso = ["expresso", 250, 0, 16, 4, 1]
+late = ["late", 350, 75, 20, 7, 1]
+capuccino = ["capuccino", 200, 100, 12, 6, 1]
+
+class CoffeeMachine:
+
+
+    def __init__(self):
+        self.walter = 400
+        self.milk = 540
+        self.coffee = 120
+        self.cups = 9
+        self.money = 550
+        self.fatality = False
+
+
+    def act(self):
+        print("Write action (buy, fill, take, remaining, exit):")
+        action = input(">")
+        self.buy() if action == "buy" else None
+        self.sts() if action == "remaining" else None
+        self.fill() if action == "fill" else None
+        if action == "take":
+            print(f'\nI gave you ${self.money}\n')
+            self.money -= self.money
+        self.fatality = True if action == "exit" else None
+
+
+    def fill(self):
+        print('\nWrite how many ml of water do you want to add:')
+        self.walter += int(input())
+        print('Write how many ml of milk do you want to add:')
+        self.milk += int(input())
+        print('Write how many grams of coffee beans do you want to add:')
+        self.coffee += int(input())
+        print('Write how many disposable cups of coffee do you want to add:')
+        self.cups += int(input())
+        print('')
+
+
+    def sts(self):
+        print('''\nThe coffee machine has:
+        {} of water
+        {} of milk
+        {} of coffee beans
+        {} of disposable cups
+        ${} of money\n'''.format(self.walter, self.milk, self.coffee, self.cups, self.money))
+
+
+    def buy(self):
+        print("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:")
+        while True:
+            entrada = input(">")
+            if entrada == "1":
+                if self.walter >= 250 and self.coffee >= 16 and self.cups >= 1:
+                    self.coffe_making(1, expresso)
+                else:
+                    self.missing(expresso)
+            elif entrada == "2":
+                if self.walter >= 350 and self.coffee >= 20 and self.cups >= 1 and self.milk >= 75:
+                    self.coffe_making(1, late)
+                else:
+                    self.missing(late)
+            elif entrada == "3":
+                if self.walter >= 200 and self.coffee >= 12 and self.cups >= 1 and self.milk >= 100:
+                    self.coffe_making(1, capuccino)
+                else:
+                    self.missing(late)
+            else:
+                break
+
+
+    def coffe_making(self, x, y):
+        print("I have enough resources, making you a coffee!\n")
+        if x == 1:
+            self.walter -= int(y[1])
+            self.milk -= int(y[2])
+            self.coffee -= int(y[3])
+            self.money += int(y[4])
+            self.cups -= int(y[5])
+
+
+    def missing(self, y):
+        print('Sorry, not enough water!') if self.walter < int(y[1]) else None
+        print('Sorry, not enough coffee beans!') if self.coffee < int(y[2]) else None
+        print('Sorry, not enough cups!') if self.cups < int(y[4]) else None
+        print('Sorry, not enough milk!') if self.milk < int(y[2]) else None
+        print('')
+
+
+pb = CoffeeMachine()
+while True:
+    pb.act()
+    if pb.fatality == True:
+        break
